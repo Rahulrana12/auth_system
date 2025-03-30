@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Login Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container" id="container">
+        <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+        <!-- Welcome Side -->
+        <div class="welcome-side">
+            <h1 id="welcome-title">Hello, Welcome!</h1>
+            <p id="welcome-text">Don't have an account?</p>
+            <button class="register-btn" id="toggleBtn">Register</button>
+        </div>
+
+        <!-- Login Side -->
+        <div class="login-side">
+            <h1>Login</h1>
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="Password" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="forgot-password">
+                    <a href="#">Forgot Password?</a>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+                <div class="social-divider">or login with social platforms</div>
+                <div class="social-buttons">
+                    <button type="button" class="social-btn">
+                        <i class="fab fa-google"></i>
+                    </button>
+                    <button type="button" class="social-btn">
+                        <i class="fab fa-facebook-f"></i>
+                    </button>
+                    <button type="button" class="social-btn">
+                        <i class="fab fa-github"></i>
+                    </button>
+                    <button type="button" class="social-btn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Register Side -->
+        <div class="register-side">
+            <h1>Create Account</h1>
+            <form id="registerForm">
+                <div class="input-group">
+                    <input type="text" id="username" required>
+                    <i class="fas fa-user"></i>
+                    <label for="username">Username</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="email" required>
+                    <i class="fas fa-envelope"></i>
+                    <label for="email">Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" required>
+                    <i class="fas fa-lock"></i>
+                    <label for="password">Password</label>
+                </div>
+                <button type="submit" class="login-btn">Sign Up</button>
+                <div class="social-divider">or register with social platforms</div>
+                <div class="social-buttons">
+                    <button type="button" class="social-btn">
+                        <i class="fab fa-google"></i>
+                    </button>
+                    <button type="button" class="social-btn">
+                        <i class="fab fa-facebook-f"></i>
+                    </button>
+                    <button type="button" class="social-btn">
+                        <i class="fab fa-github"></i>
+                    </button>
+                    <button type="button" class="social-btn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
