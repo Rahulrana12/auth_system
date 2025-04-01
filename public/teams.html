@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="team-container">
+        <div class="team-header">
+            <h1 class="team-title">Team Management System</h1>
+            <button id="logoutBtn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+
+        <button id="addTeamBtn" class="add-team-btn">
+            <i class="fas fa-plus"></i> Add New Team
+        </button>
+
+        <div id="teamGrid" class="team-grid">
+            <!-- Teams will be dynamically added here -->
+        </div>
+    </div>
+
+    <!-- Add Team Modal -->
+    <div id="addTeamModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Team</h2>
+                <button id="closeModal" class="close-modal">&times;</button>
+            </div>
+            <form id="addTeamForm">
+                <div class="form-group">
+                    <label for="teamName">Team Name</label>
+                    <input type="text" id="teamName" required>
+                </div>
+                <div class="form-group">
+                    <label for="teamDescription">Description</label>
+                    <input type="text" id="teamDescription">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancelAddTeam" class="cancel-btn">Cancel</button>
+                    <button type="submit" class="save-btn">Create Team</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="team.js"></script>
+</body>
+</html> 

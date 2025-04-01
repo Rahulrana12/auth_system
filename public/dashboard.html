@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Management Dashboard</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="brand">
+                <h2>TMS</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li class="nav-item active" data-section="overview">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Overview</span>
+                    </li>
+                    <li class="nav-item" data-section="teams">
+                        <i class="fas fa-users"></i>
+                        <span>Teams</span>
+                    </li>
+                    <li class="nav-item" data-section="tasks">
+                        <i class="fas fa-tasks"></i>
+                        <span>My Tasks</span>
+                    </li>
+                    <li class="nav-item" data-section="chat">
+                        <i class="fas fa-comments"></i>
+                        <span>Team Chat</span>
+                    </li>
+                    <li class="nav-item" id="adminPanel" style="display: none;" data-section="admin">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Admin Panel</span>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="user-info">
+                    <span id="userRole" class="user-role"></span>
+                    <span id="userName" class="user-name"></span>
+                    <div class="user-avatar">
+                        <span id="userInitial"></span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content-container">
+                <!-- Overview Section -->
+                <section id="overview" class="content-section active">
+                    <h1>Dashboard Overview</h1>
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>My Teams</h3>
+                                <p id="teamCount">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>My Tasks</h3>
+                                <p id="taskCount">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Completed Tasks</h3>
+                                <p id="completedTaskCount">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Pending Tasks</h3>
+                                <p id="pendingTaskCount">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-activity">
+                        <h2>Recent Activity</h2>
+                        <div id="activityList" class="activity-list">
+                            <!-- Activity items will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Teams Section -->
+                <section id="teams" class="content-section">
+                    <div class="section-header">
+                        <h1>My Teams</h1>
+                        <button id="createTeamBtn" class="primary-btn admin-only" style="display: none;">
+                            <i class="fas fa-plus"></i> Create Team
+                        </button>
+                    </div>
+                    <div id="teamsContainer" class="teams-container">
+                        <!-- Teams will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Tasks Section -->
+                <section id="tasks" class="content-section">
+                    <div class="section-header">
+                        <h1>My Tasks</h1>
+                    </div>
+                    <div class="task-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="pending">Pending</button>
+                        <button class="filter-btn" data-filter="in-progress">In Progress</button>
+                        <button class="filter-btn" data-filter="completed">Completed</button>
+                    </div>
+                    <div id="tasksContainer" class="tasks-container">
+                        <!-- Tasks will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Chat Section -->
+                <section id="chat" class="content-section">
+                    <div class="chat-container">
+                        <div class="chat-sidebar">
+                            <div class="chat-header">
+                                <div class="user-avatar" id="chatUserAvatar"></div>
+                                <div class="user-info">
+                                    <div class="user-name" id="chatUserName"></div>
+                                </div>
+                            </div>
+                            <div class="chat-team-select">
+                                <select id="chatTeamSelect">
+                                    <option value="">Select a team</option>
+                                </select>
+                            </div>
+                            <div class="online-members" id="onlineMembers"></div>
+                        </div>
+                        <div class="chat-main">
+                            <div class="chat-messages" id="chatMessages"></div>
+                            <div class="chat-input-container">
+                                <form id="chatForm" class="chat-input-form">
+                                    <button type="button" class="chat-input-action" id="attachButton" title="Attach file">
+                                        <i class="fas fa-paperclip"></i>
+                                    </button>
+                                    <input type="file" id="fileInput" style="display: none" multiple>
+                                    <input type="text" id="chatInput" placeholder="Type a message" autocomplete="off">
+                                    <div class="chat-input-actions">
+                                        <button type="button" class="chat-input-action" id="emojiButton" title="Add emoji">
+                                            <i class="far fa-smile"></i>
+                                        </button>
+                                        <button type="submit" class="chat-input-action send" title="Send message">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Admin Panel Section -->
+                <section id="admin" class="content-section">
+                    <h1>Admin Panel</h1>
+                    <div class="admin-tabs">
+                        <button class="tab-btn active" data-tab="users">Users</button>
+                        <button class="tab-btn" data-tab="teams">Teams</button>
+                        <button class="tab-btn" data-tab="invitations">Invitations</button>
+                    </div>
+                    <div class="admin-tab-content">
+                        <div id="usersTab" class="tab-pane active">
+                            <h2>User Management</h2>
+                            <div id="usersList" class="admin-list">
+                                <!-- Users will be loaded here -->
+                            </div>
+                        </div>
+                        <div id="teamsTab" class="tab-pane">
+                            <h2>Team Management</h2>
+                            <div id="adminTeamsList" class="admin-list">
+                                <!-- Teams will be loaded here -->
+                            </div>
+                        </div>
+                        <div id="invitationsTab" class="tab-pane">
+                            <div class="section-header">
+                                <h2>Team Invitations</h2>
+                                <button class="primary-btn" id="createInvitationBtn">
+                                    <i class="fas fa-user-plus"></i> Create Invitation
+                                </button>
+                            </div>
+                            <div class="invitations-section">
+                                <h3>Pending Invitations</h3>
+                                <div id="invitationsList" class="admin-list">
+                                    <!-- Invitations will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Create Team Modal -->
+    <div id="createTeamModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Team</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="createTeamForm">
+                <div class="form-group">
+                    <label for="teamName">Team Name</label>
+                    <input type="text" id="teamName" required>
+                </div>
+                <div class="form-group">
+                    <label for="teamDescription">Description</label>
+                    <textarea id="teamDescription"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn">Cancel</button>
+                    <button type="submit" class="primary-btn">Create Team</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Task Modal -->
+    <div id="createTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Task</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="createTaskForm">
+                <div class="form-group">
+                    <label for="taskTitle">Title</label>
+                    <input type="text" id="taskTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="taskDescription">Description</label>
+                    <textarea id="taskDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="taskAssignee">Assign To</label>
+                    <select id="taskAssignee" required>
+                        <!-- Team members will be loaded here -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="taskDeadline">Deadline</label>
+                    <input type="date" id="taskDeadline" required>
+                </div>
+                <input type="hidden" id="taskTeamId" value="">
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn">Cancel</button>
+                    <button type="submit" class="primary-btn">Create Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Assign Team Modal -->
+    <div id="assignTeamModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Assign User to Team</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="assignTeamForm">
+                <div class="form-group">
+                    <label for="assignTeamSelect">Select Team</label>
+                    <select id="assignTeamSelect" required>
+                        <!-- Teams will be loaded here -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="assignRole">Role in Team</label>
+                    <select id="assignRole" required>
+                        <option value="employee">Employee</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn">Cancel</button>
+                    <button type="submit" class="primary-btn">Assign to Team</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Invitation Modal -->
+    <div id="createInvitationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Team Invitation</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="invite-tabs">
+                <button class="invite-tab active" data-tab="email">Email Invitation</button>
+                <button class="invite-tab" data-tab="link">Invitation Link</button>
+            </div>
+            <div class="invite-content">
+                <!-- Email Invitation Form -->
+                <div id="emailInviteTab" class="invite-tab-content active">
+                    <form id="inviteUserForm">
+                        <div class="form-group">
+                            <label for="inviteTeamSelect">Select Team</label>
+                            <select id="inviteTeamSelect" required>
+                                <option value="">Select a team</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inviteEmail">Email Address</label>
+                            <input type="email" id="inviteEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inviteRole">Role</label>
+                            <select id="inviteRole" required>
+                                <option value="employee">Employee</option>
+                                <option value="manager">Manager</option>
+                            </select>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="cancel-btn">Cancel</button>
+                            <button type="submit" class="primary-btn">Send Invitation</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- Invitation Link Tab -->
+                <div id="linkInviteTab" class="invite-tab-content">
+                    <div class="form-group">
+                        <label for="inviteLinkTeamSelect">Select Team</label>
+                        <select id="inviteLinkTeamSelect" required>
+                            <option value="">Select a team</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inviteLinkRole">Role for Link Invitees</label>
+                        <select id="inviteLinkRole" required>
+                            <option value="employee">Employee</option>
+                            <option value="manager">Manager</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inviteLinkExpiry">Link Expires In</label>
+                        <select id="inviteLinkExpiry" required>
+                            <option value="24">24 hours</option>
+                            <option value="72">3 days</option>
+                            <option value="168">7 days</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Invitation Link</label>
+                        <div class="invite-link-container">
+                            <input type="text" id="invitationLink" readonly placeholder="Click 'Generate Link' to create an invitation link">
+                            <button type="button" id="generateLinkBtn" class="secondary-btn">Generate Link</button>
+                            <button type="button" id="copyLinkBtn" class="icon-btn" title="Copy Link">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="cancel-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/dashboard.js"></script>
+</body>
+</html> 

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            min-height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Test Page</h1>
+    
+    <div>
+        <button id="testLogin">Test Login API</button>
+        <button id="testRegister">Test Register API</button>
+        <button id="testMe">Test Me API</button>
+        <button id="testDirectEndpoint">Test Direct Endpoint</button>
+    </div>
+    
+    <div id="result">
+        <p>Results will appear here</p>
+    </div>
+
+    <script>
+        const resultDiv = document.getElementById('result');
+        
+        function displayResult(title, data) {
+            resultDiv.innerHTML = `
+                <h3>${title}</h3>
+                <pre>${typeof data === 'object' ? JSON.stringify(data, null, 2) : data}</pre>
+            `;
+        }
+
+        document.getElementById('testLogin').addEventListener('click', async () => {
+            try {
+                displayResult('Testing login API...', 'Sending request...');
+                
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'test@example.com',
+                        password: 'password123'
+                    })
+                });
+                
+                displayResult('Login API Response', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: {
+                        contentType: response.headers.get('content-type')
+                    },
+                    body: await response.text()
+                });
+            } catch (error) {
+                displayResult('Login API Error', error.toString());
+            }
+        });
+
+        document.getElementById('testRegister').addEventListener('click', async () => {
+            try {
+                displayResult('Testing register API...', 'Sending request...');
+                
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: 'Test User',
+                        email: 'test' + Date.now() + '@example.com',
+                        password: 'password123'
+                    })
+                });
+                
+                displayResult('Register API Response', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: {
+                        contentType: response.headers.get('content-type')
+                    },
+                    body: await response.text()
+                });
+            } catch (error) {
+                displayResult('Register API Error', error.toString());
+            }
+        });
+
+        document.getElementById('testMe').addEventListener('click', async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    displayResult('Me API Error', 'No token found. Please login first.');
+                    return;
+                }
+                
+                displayResult('Testing me API...', 'Sending request...');
+                
+                const response = await fetch('/api/me', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                displayResult('Me API Response', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: {
+                        contentType: response.headers.get('content-type')
+                    },
+                    body: await response.text()
+                });
+            } catch (error) {
+                displayResult('Me API Error', error.toString());
+            }
+        });
+
+        document.getElementById('testDirectEndpoint').addEventListener('click', async () => {
+            try {
+                displayResult('Testing direct endpoint...', 'Sending request...');
+                
+                const response = await fetch('/api/test');
+                
+                displayResult('Direct Endpoint Response', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: {
+                        contentType: response.headers.get('content-type')
+                    },
+                    body: await response.text()
+                });
+            } catch (error) {
+                displayResult('Direct Endpoint Error', error.toString());
+            }
+        });
+    </script>
+</body>
+</html> 
